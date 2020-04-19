@@ -6,228 +6,240 @@
 #include <math.h>
 
 #define NUMERO_ASTEROIDES 25
+#define RADS_CONST 0.01745329252
 
 using namespace std;
-class Poligono{
+class Asteroide{
     private:
-        int coordX;//coordenadas del centro del poligono
-        int coordY;//coordenadas del centro del poligono
-        int radio=10;//radio inicial del poligono
-        int lado;//lado del que va a salir el poligono
-        float yf[60];//arreglo de vertices en Y
-        float xf[60];//arreglo de vertices en X
-        int nvertices;//total de vertices del poligono
-        int tamano;
-        int maxRadio;
-        vector<int> radios;
+        int CoordX; //coordenadas del centro del poligono
+        int CoordY; //coordenadas del centro del poligono
+        int rad=10; //radio inicial del poligono
+        int Cuadr; //Cuadrante del que va a salir el poligono
+        float ArrY[60]; //arreglo de vertices en Y
+        float ArrX[60]; //arreglo de vertices en X
+        int Vert; //total de vertices del poligono
+        int Tam;
+        int maxRad;
+        vector<int> Radios;
         
     public:
-        vector<int> trayectoria();
-        void encontrarColision(Poligono[]);
-        void ast(int, int, int, int);
-        void ast2(int, int);
-        int getMaxRadio();
+        vector<int> Tray(); //Trayectoria del vector
+        void ImpAst(Asteroide[]);
+        void Ast(int, int, int, int);
+        void Ast2(int, int);
+        int getMaxRad();
 };
 
-int Poligono::getMaxRadio(){
-    return maxRadio;
+int Asteroide::getMaxRad(){
+    return maxRad;
 }
 
-void Poligono::ast(int xo, int yo, int ld, int tm){
-    int conta=0;
-    int i = 0;
-    int j = 0;
-    int temp = 0;
-    float numa=0;
-    lado=ld;
-    coordX=xo;
-    coordY=yo;
+void Asteroide::Ast(int Xo, int Yo, int lado, int tm){
+    int i = 0, j = 0;
+    int Cont = 0, Temp = 0;
     int n = 18;
-    radios.reserve(n);
+    float Num=0;
+    Cuadr = lado;
+    CoordX = Xo;   CoordY = Yo;
+    
+        Radios.reserve(n);
+        
 //creacion del asteroide
-    xf[conta]=radio*cos(0.01745329252*numa)+coordX;
-    yf[conta]=radio*sin(0.01745329252*numa)+coordY;
-    conta++;
- while(numa<=340){    
-     radio = rand() % 20 + n;
-     radios[i] = radio; //Se agrega el radio al vector que tendrá todos los radios de cada asteroide
-     xf[conta]=radio*cos(0.01745329252*numa)+coordX;
-     yf[conta]=radio*sin(0.01745329252*numa)+coordY;
-     gfx_line(xf[conta-1],yf[conta-1],xf[conta],yf[conta]);
-     conta++;
-     numa=numa+20;
-     i++;
- }
-
- // Se ordenan los radios almacenados en el vector
- for (i = 0; i < n; ++i) {
-    for (j = i + 1; j < n; ++j)
-    {
-        if (radios[i] > radios[j]) 
-        {   
-            temp =  radios[i];
-            radios[i] = radios[j];
-            radios[j] = temp;
+        ArrX[Cont]=rad*cos(RADS_CONST*Num)+CoordX;
+        ArrY[Cont]=rad*sin(RADS_CONST*Num)+CoordY;
+        
+        Cont++;
+        
+        while(Num<=340){    
+            rad = rand() % 25 + n; 
+            Radios[i] = rad; //Se a�ade el radio generado al vector que almacena todos los radios
+            ArrX[Cont]=rad*cos(RADS_CONST*Num)+CoordX;
+            ArrY[Cont]=rad*sin(RADS_CONST*Num)+CoordY;
+                gfx_line(ArrX[Cont-1], ArrY[Cont-1], ArrX[Cont], ArrY[Cont]);
+            Cont++;
+            Num = Num+20;
+            i++;
         }
-    }
- }
+ //Ordenamiento de los radios almacenados en Radios[]
+        for (i=0; i<n; ++i){
+            for (j=i+1; j<n; ++j){
+               if (Radios[i] > Radios[j]){   
+                   Temp =  Radios[i];
+                   Radios[i] = Radios[j];
+                   Radios[j] = temp;
+               }
+           }
+        }
+ 
+    maxRad = radios[n-1]; // Se asigna el  valor de radio mas grande a maxRad
 
- // Se asigna el radio mas grande a la variable maxRadio
- maxRadio = radios[n-1];
-
-
- gfx_line(xf[0],yf[0],xf[conta-1],yf[conta-1]); //termino de la creación del asteroide
- nvertices=conta-1;
+    gfx_line(ArrX[0], ArrY[0], xf[Cont-1], ArrY[Cont-1]); //Termina la creacion de los asteroides
+        Vert = Cont-1;
 }
 
-
-void Poligono::ast2(int xo, int yo){
-    int conta=0;
-    float numa=0;
-    int radio2=10;
-    int var = rand() % 20;
-    //lado=ld;
-    coordX=xo;
-    coordY=yo;
+void Asteroide::ast2(int Xo, int Yo){
+    int Cont = 0, Rad2 = 10;
+    float Num = 0;
+    //int var = rand() % 20; ******************** checar
+    //Cuadr=lado;
+    CoordX = Xo;
+    CoordY = Yo;
 //creacion del asteroide
-    xf[conta]=radio2*cos(0.01745329252*numa)+coordX;
-    yf[conta]=radio2*sin(0.01745329252*numa)+coordY;
-    conta++;
- while(numa<=340){    
-     radio2 = rand() % 5 + 10;
-    xf[conta]=radio2*cos(0.01745329252*numa)+coordX;
-    yf[conta]=radio2*sin(0.01745329252*numa)+coordY;
-     gfx_line(xf[conta-1],yf[conta-1],xf[conta],yf[conta]);
-     conta++;
-     numa=numa+10;
-     gfx_flush();
- }
- gfx_line(xf[0],yf[0],xf[conta-1],yf[conta-1]); //termino de la creación del asteroide
- nvertices=conta-1;
+        ArrX[Cont]=Rad2*cos(RADS_CONST*Num)+CoordX;
+        ArrY[Cont]=Rad2*sin(RADS_CONST*Num)+CoordY;
+        Cont++;
+        
+        while(Num<=340){    
+            Rad2 = rand() % 5 + 10;
+            ArrX[Cont]=Rad2*cos(RADS_CONST*Num)+CoordX;
+            ArrY[Cont]=Rad2*sin(RADS_CONST*Num)+CoordY;
+                gfx_line(ArrX[Cont-1], ArrY[Cont-1], ArrX[Cont], ArrY[Cont]);
+            Cont++;
+            Num = Num+10;
+                gfx_flush();
+        }
+       
+        gfx_line(ArrX[0], ArrY[0], ArrX[Cont-1], ArrY[Cont-1]); //Termina 
+        Vert = Cont-1;
 }
 
-
-/*
- Regresa las coordenadas de un asteroide cada que cambia de posicion
-*/
-vector<int> Poligono::trayectoria(){
-    vector <int> parCoordenadas(3); //Vector que almacena las coordenadas y el radio mayor de un asteroide
-    int aux1=0, aux2=0, num1=0,num2=0, h=0;
-    if (lado==0){
-        num1 = rand() % 2;
-        num2 = rand() % 3-1;
-        for(h=0; h<=nvertices; h++){
-            xf[h]= xf[h] + num1;
-            yf[h]= yf[h] + num2;
-            coordX=coordX+num1;
-            coordY=coordY+num2;
+// Actualiza las coordenadas del asteroide generando una trayectoria
+vector<int> Asteroide::Tray(){
+    
+    vector <int> Coordenadas(3);    //Vector que almacena las coordenadas y el maxRad de un asteroide
+    // int Aux1 = 0, Aux2 = 0; ************************** checar y eliminar
+    int Num1 = 0 , Num2 = 0;
+    int k = 0;
+    
+    if (Cuadr==0){
+        Num1 = rand() % 2;
+        Num2 = rand() % 3-1;
+        for(k=0; k<=Vert; k++){
+            ArrX[k] = xf[k] + Num1;
+            ArrY[k] = ArrY[k] + Num2;
+            CoordX = CoordX+Num1;
+            CoordY = CoordY+Num2;
         }
-        for(h=1;h<=nvertices;h++)
-            gfx_line(xf[h-1],yf[h-1],xf[h],yf[h]);
-        gfx_line(xf[0],yf[0],xf[h-1],yf[h-1]);
-        usleep(4166);
-    }else if(lado==1){
-        num1 = rand() % 3-1;
-        num2 = rand() % 2;
-        xf[h]= xf[h] + num1;
-        yf[h]= yf[h] + num2;
-        for(h=1; h<=nvertices; h++){
-            xf[h]= xf[h] + num1;
-            yf[h]= yf[h] + num2;
-            coordX=coordX+num1;
-            coordY=coordY+num2;            
-        }
-        for(h=1;h<=nvertices;h++)
-            gfx_line(xf[h-1],yf[h-1],xf[h],yf[h]);
-        gfx_line(xf[0],yf[0],xf[h-1],yf[h-1]);
-        usleep(4166);
-    }else if(lado==2){
-        num1 = rand() % 3-2;
-        num2 = rand() % 3-1;
-        xf[h]= xf[h] + num1;
-        yf[h]= yf[h] + num2;
-        for(h=1; h<=nvertices; h++){
-            xf[h]= xf[h] + num1;
-            yf[h]= yf[h] + num2;
-            coordX=coordX+num1;
-            coordY=coordY+num2;
-        }
-        for(h=1;h<=nvertices;h++)
-            gfx_line(xf[h-1],yf[h-1],xf[h],yf[h]);
-        gfx_line(xf[0],yf[0],xf[h-1],yf[h-1]);
-        usleep(4166);
-    }else if(lado==3){
-        num1 = rand() % 3-1;
-        num2 = rand() % 3-2;
-        xf[h]= xf[h] + num1;
-        yf[h]= yf[h] + num2;
-        for(h=1; h<=nvertices; h++){
-            xf[h]= xf[h] + num1;
-            yf[h]= yf[h] + num2;
-            coordX=coordX+num1;
-            coordY=coordY+num2;
-        }
-        for(h=1;h<=nvertices;h++)
-            gfx_line(xf[h-1],yf[h-1],xf[h],yf[h]);
-        gfx_line(xf[0],yf[0],xf[h-1],yf[h-1]);
+        for(k=1; k<=Vert; k++)
+            gfx_line(ArrX[k-1], ArrY[k-1], ArrX[k], ArrY[k]); 
+        
+        gfx_line(ArrX[0], ArrY[0], ArrX[k-1], ArrY[k-1]);
         usleep(4166);
     }
+    else if(Cuadr==1){
+            Num1 = rand() % 3-1;
+            Num2 = rand() % 2;
+            ArrX[k] = ArrX[k] + Num1;
+            ArrY[k] = ArrY[k] + Num2;
+            
+            for(k=1; k<=Vert; k++){
+                ArrX[k] = ArrX[k] + Num1;
+                ArrY[k] = ArrY[k] + Num2;
+                CoordX = CoordX+Num1;
+                CoordY = CoordY+Num2;            
+            }
+            for(k=1; k<=Vert; k++)
+                gfx_line(ArrX[k-1], ArrY[k-1], ArrX[k], ArrY[k]);
+            
+            gfx_line(ArrX[0], ArrY[0], ArrX[k-1], ArrY[k-1]);
+            usleep(4166);
+    }
+        else if(Cuadr==2){
+            Num1 = rand() % 3-2;
+            Num2 = rand() % 3-1;
+            ArrX[k]= ArrX[k] + Num1;
+            ArrY[k]= ArrY[k] + Num2;
+            
+            for(k=1; k<=Vert; k++){
+                ArrX[k] = ArrX[k] + Num1;
+                ArrY[k] = ArrY[k] + Num2;
+                CoordX = CoordX+Num1;
+                CoordY = CoordY+Num2;
+            }
+            for(k=1; k<=Vert; k++)
+                gfx_line(ArrX[k-1], ArrY[k-1], ArrX[k], ArrY[k]);
+            
+            gfx_line(ArrX[0], ArrY[0], ArrX[k-1], ArrY[k-1]);
+            usleep(4166);
+        }
+                else if(Cuadr==3){
+                    Num1 = rand() % 3-1;
+                    Num2 = rand() % 3-2;
+                    xf[k] = xf[k] + Num1;
+                    ArrY[k] = ArrY[k] + Num2;
 
-    parCoordenadas[0] = coordX;
-    parCoordenadas[1] = coordY;
-    parCoordenadas[2] = maxRadio;
+                    for(k=1; k<=Vert; k++){
+                        xf[k] = ArrX[k] + Num1;
+                        ArrY[k] = ArrY[k] + Num2;
+                        CoordX = CoordX+Num1;
+                        CoordY = CoordY+Num2;
+                    }
+                    for(k=1; k<=Vert; k++)
+                        gfx_line(ArrX[k-1], ArrY[k-1], ArrX[k], ArrY[k]);
 
-    return parCoordenadas;
+                    gfx_line(ArrX[0], ArrY[0], ArrX[k-1], ArrY[k-1]);
+                    usleep(4166);
+                }
+
+    Coordenadas[0] = CoordX;
+    Coordenadas[1] = CoordY;
+    Coordenadas[2] = maxRad;
+
+    return Coordenadas;
 }
 
-void Poligono::encontrarColision(Poligono a[]){
-    int cont = 0;
-    vector<int> coordenadasAsteroide(3);
-    vector<vector<int> > vectorCoordenadas(NUMERO_ASTEROIDES); // Vector de vectores de coordenadas
+void Asteroide::ImpAst(Asteroide a[]){
+    int Cont = 0;
+    vector<int> CoordAst(3);
+    vector<vector<int> > CoordVector(NUMERO_ASTEROIDES); // Vector de vectores de coordenadas
 
-    vectorCoordenadas.reserve(NUMERO_ASTEROIDES);
+        CoordVector.reserve(NUMERO_ASTEROIDES);
 
-    for(cont=0; cont<NUMERO_ASTEROIDES; cont++){
-        coordenadasAsteroide = a[cont].trayectoria();
-        vectorCoordenadas[cont] = coordenadasAsteroide;
-        //cout << "\nCoordenadas asteroide" << coordenadasAsteroide[0] << ", "<< coordenadasAsteroide[1] <<endl;
-        //cout << "Vector coordenadas" << vectorCoordenadas[cont][0] << ", "<< vectorCoordenadas[cont][1] <<endl;
-    }
+        for(Cont=0; Cont<NUMERO_ASTEROIDES; Cont++){
+            CoordAst = a[Cont].Tray();
+            CoordVector[Cont] = CoordAst;
+            //cout << "\nCoordenadas del asteroide" << CoordAst ", "<< CoordAst[1] <<endl;
+            //cout << "\Vector de coordenadas" << CoordVector[cont][0] << ", "<< CoordVector[cont][1] <<endl;
+        }
 }
 
 int main(){
-    int num, tam, coorX, coorY;
-    Poligono a[NUMERO_ASTEROIDES];
-    int cont=0;
+    int Num, Tam, CoorX, CoorY;
+    Asteroide a[NUMERO_ASTEROIDES]; //Aparece 6 veces
+    int Cont=0; 
     //char c;
     srand(time(NULL));
     gfx_open(700, 700, "Asteroides");
-    gfx_color(0,250,0);
-    coorY=rand()%601;
-
-    while(cont<NUMERO_ASTEROIDES){
-        num = rand() % 4;//elegir de que lado saldra el poligono
+    gfx_color(0, 250, 0);
+    CoorY = rand()%601;
+    
+    while(Cont<NUMERO_ASTEROIDES){
+        Num = rand() % 4; //elegir de que lado saldra el poligono
         //Determinar de que lado va a salir y en que punto saldra el poligono
-        if(num==0){
-        coorX=0;
-        coorY=rand()%601;
-        }else if(num==1){
-            coorX=rand()%801;
-            coorY=0;
-        }else if(num==2){
-            coorX=800;
-            coorY=rand()%601;
-        }else if(num==3){
-            coorX=rand()%801;
-            coorY=600;
+        if(Num==0){
+            CoorX = 0;
+            CoorY = rand()%601;
         }
-        tam = 1 + rand() % (6 - 1);
-        a[cont].ast(coorX,coorY,num,tam);
-        cont++;
+        else if(Num==1){
+            CoorX = rand()%801;
+            CoorY = 0;
+            }
+                else if(Num==2){
+                    CoorX = 800;
+                    CoorY = rand()%601;
+                }
+                    else if(Num==3){
+                        CoorX = rand()%801;
+                        CoorY = 600;
+                    }
+        
+        Tam = 1 + rand() % (6 - 1);
+        a[Cont].Ast(CoorX,CoorY,Num,Tam);
+        Cont++;
     }
 
     while(1){
-        a[cont].encontrarColision(a);
+        a[Cont].ImpAst(a);
         gfx_flush();
         gfx_clear();
     }
