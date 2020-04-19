@@ -15,8 +15,8 @@ class Asteroide{
         int CoordY; //coordenadas del centro del poligono
         int rad=10; //radio inicial del poligono
         int Cuadr; //Cuadrante del que va a salir el poligono
-        float ArrY[60]; //arreglo de vertices en Y
-        float ArrX[60]; //arreglo de vertices en X
+	float ArrY[60]; //arreglo de vertices en eje Y
+        float ArrX[60]; //arreglo de vertices en eje X
         int Vert; //total de vertices del poligono
         int Tam;
         int maxRad;
@@ -28,6 +28,7 @@ class Asteroide{
         void Ast(int, int, int, int);
         void Ast2(int, int);
         int getMaxRad();
+	//int Cantidad;
 };
 
 int Asteroide::getMaxRad(){
@@ -66,25 +67,24 @@ void Asteroide::Ast(int Xo, int Yo, int lado, int tm){
                if (Radios[i] > Radios[j]){   
                    Temp =  Radios[i];
                    Radios[i] = Radios[j];
-                   Radios[j] = temp;
+                   Radios[j] = Temp;
                }
            }
         }
  
-    maxRad = radios[n-1]; // Se asigna el  valor de radio mas grande a maxRad
+    maxRad = Radios[n-1]; // Se asigna el  valor de radio mas grande a maxRad
 
-    gfx_line(ArrX[0], ArrY[0], xf[Cont-1], ArrY[Cont-1]); //Termina la creacion de los asteroides
+    gfx_line(ArrX[0], ArrY[0], ArrX[Cont-1], ArrY[Cont-1]); //Termina la creacion de los asteroides
         Vert = Cont-1;
 }
 
-void Asteroide::ast2(int Xo, int Yo){
+void Asteroide::Ast2(int Xo, int Yo){
     int Cont = 0, Rad2 = 10;
     float Num = 0;
-    //int var = rand() % 20; ******************** checar
-    //Cuadr=lado;
     CoordX = Xo;
     CoordY = Yo;
-//creacion del asteroide
+	
+	//creacion del asteroide
         ArrX[Cont]=Rad2*cos(RADS_CONST*Num)+CoordX;
         ArrY[Cont]=Rad2*sin(RADS_CONST*Num)+CoordY;
         Cont++;
@@ -106,8 +106,7 @@ void Asteroide::ast2(int Xo, int Yo){
 // Actualiza las coordenadas del asteroide generando una trayectoria
 vector<int> Asteroide::Tray(){
     
-    vector <int> Coordenadas(3);    //Vector que almacena las coordenadas y el maxRad de un asteroide
-    // int Aux1 = 0, Aux2 = 0; ************************** checar y eliminar
+    vector <int> Coordenadas(3);    //Vector que almacena las coordenadas y el maxRad de un ast
     int Num1 = 0 , Num2 = 0;
     int k = 0;
     
@@ -115,7 +114,7 @@ vector<int> Asteroide::Tray(){
         Num1 = rand() % 2;
         Num2 = rand() % 3-1;
         for(k=0; k<=Vert; k++){
-            ArrX[k] = xf[k] + Num1;
+            ArrX[k] = ArrX[k] + Num1;
             ArrY[k] = ArrY[k] + Num2;
             CoordX = CoordX+Num1;
             CoordY = CoordY+Num2;
@@ -165,11 +164,11 @@ vector<int> Asteroide::Tray(){
                 else if(Cuadr==3){
                     Num1 = rand() % 3-1;
                     Num2 = rand() % 3-2;
-                    xf[k] = xf[k] + Num1;
+                    ArrX[k] = ArrX[k] + Num1;
                     ArrY[k] = ArrY[k] + Num2;
 
                     for(k=1; k<=Vert; k++){
-                        xf[k] = ArrX[k] + Num1;
+                        ArrX[k] = ArrX[k] + Num1;
                         ArrY[k] = ArrY[k] + Num2;
                         CoordX = CoordX+Num1;
                         CoordY = CoordY+Num2;
@@ -199,23 +198,26 @@ void Asteroide::ImpAst(Asteroide a[]){
             CoordAst = a[Cont].Tray();
             CoordVector[Cont] = CoordAst;
             //cout << "\nCoordenadas del asteroide" << CoordAst ", "<< CoordAst[1] <<endl;
-            //cout << "\Vector de coordenadas" << CoordVector[cont][0] << ", "<< CoordVector[cont][1] <<endl;
+            //cout << "Vector de coordenadas" << CoordVector[cont][0] << ", "<< CoordVector[cont][1] <<endl;
         }
 }
 
 int main(){
-    int Num, Tam, CoorX, CoorY;
-    Asteroide a[NUMERO_ASTEROIDES]; //Aparece 6 veces
-    int Cont=0; 
-    //char c;
+	int Num, Tam, CoorX, CoorY;
+	Asteroide a[NUMERO_ASTEROIDES]; //Aparece 6 veces
+	int Cont=0; 
+
+	//cout << "Inserte el numero de asteroides que deberán aparecer" << endl;
+	//cin >> Cantidad;
+	
     srand(time(NULL));
     gfx_open(700, 700, "Asteroides");
     gfx_color(0, 250, 0);
     CoorY = rand()%601;
     
     while(Cont<NUMERO_ASTEROIDES){
-        Num = rand() % 4; //elegir de que lado saldra el poligono
-        //Determinar de que lado va a salir y en que punto saldra el poligono
+        Num = rand() % 4; //Elegir al azar el cuadrante del que saldra el poligono
+        //Determinar cuadrante y punto por donde saldra el poligono
         if(Num==0){
             CoorX = 0;
             CoorY = rand()%601;
@@ -234,7 +236,7 @@ int main(){
                     }
         
         Tam = 1 + rand() % (6 - 1);
-        a[Cont].Ast(CoorX,CoorY,Num,Tam);
+        a[Cont].Ast(CoorX, CoorY, Num, Tam);
         Cont++;
     }
 
