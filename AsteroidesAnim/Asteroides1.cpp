@@ -27,7 +27,8 @@ class Asteroide{
         void Ast(int, int, int, int);
         void Ast2(int, int);
         int getMaxRad();
-        int Cantidad=0;
+        int &Cantidad=Cantidad_a;
+	int Cantidad_a;
 };
 
 int Asteroide::getMaxRad(){
@@ -202,17 +203,17 @@ void Asteroide::ImpAst(Asteroide a[]){
 }
 
 int main(){
-	int Num, Tam, CoorX, CoorY,Cantidad;
-	cout << "Inserte el numero de asteroides que deberán aparecer" << endl;
-	cin >> Cantidad;
-	Asteroide a[Cantidad]; //Aparece 6 veces
+	int Num, Tam, CoorX, CoorY, Cantidad_a;
+	cout << "Inserte el numero de asteroides que deberan aparecer" << endl;
+	cin >> Cantidad_a;
+	Asteroide a[Cantidad_a]; 
 	int Cont=0; 
-    srand(time("NULL"));
+    srand(time(NULL));
     gfx_open(700, 700, "Asteroides");
     gfx_color(0, 250, 0);
     CoorY = rand()%601;
     
-    while(Cont<Cantidad){
+    while(Cont<Cantidad_a){
         Num = rand() % 4; //Elegir al azar el cuadrante del que saldra el poligono
         //Determinar cuadrante y punto por donde saldra el poligono
         if(Num==0){
