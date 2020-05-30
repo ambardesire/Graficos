@@ -5,7 +5,7 @@
 #include <vector>
 #include <math.h>
 
-#define NUMERO_ASTEROIDES 25
+#define NUMERO_ASTEROIDES 5
 #define RADS_CONST 0.01745329252
 
 using namespace std;
@@ -202,9 +202,9 @@ void Asteroide::ImpAst(Asteroide a[]){
         }
 }
 
-int main(){
+int main(/*int argc, char *argv[]*/){
 	int Num, Tam, CoorX, CoorY;
-	Asteroide a[NUMERO_ASTEROIDES]; //Aparece 6 veces
+	Asteroide a[NUMERO_ASTEROIDES]; //6
 	int Cont=0; 
 
 	//cout << "Inserte el numero de asteroides que deberán aparecer" << endl;
